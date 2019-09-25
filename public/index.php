@@ -25,7 +25,7 @@
                     <h3 class="js-has-saving text-info" style="display: none;">Saving...</h3>
                     <hr/>
                     <div class="form-group row">
-                        <div class="form-group col-6 col-xs-12">
+                        <div class="form-group col-md-6 col-sm-12">
                             <label for="category" class="h6 text-uppercase">What is your question about?</label>
                             <select name="category" class="form-control selectpicker" id="category">
                                 <option>Please Select</option>
@@ -36,7 +36,7 @@
                                 } ?>
                             </select>
                         </div>
-                        <div class="form-group col-6 col-xs-12">
+                        <div class="form-group col-md-6 col-sm-12">
                             <label for="orderNumber" class="h6 text-uppercase">Order Number</label>
                             <input name="orderNumber" type="number" class="form-control" id="orderNumber" min="1" placeholder="Enter order number">
                         </div>
@@ -44,17 +44,17 @@
                     <hr/>
                     <h3>About you</h3>
                     <div class="form-group row">
-                        <div class="form-group col-6 col-xs-12">
+                        <div class="form-group col-md-6 col-sm-12">
                             <label for="firstName" class="h6 text-uppercase">First name</label>
                             <input name="firstName" type="text" class="form-control" id="firstName" placeholder="Enter first name">
                         </div>
-                        <div class="form-group col-6 col-xs-12">
+                        <div class="form-group col-md-6 col-sm-12">
                             <label for="lastName" class="h6 text-uppercase">Last name</label>
                             <input name="lastName" type="text" class="form-control" id="lastName" placeholder="Enter last name">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <div class="form-group col-6 col-xs-12">
+                        <div class="form-group col-md-6 col-sm-12">
                             <label for="email" class="h6 text-uppercase">Email address</label>
                             <input name="email" class="form-control" id="email" aria-describedby="emailHelp"
                                    placeholder="Enter email address">
@@ -62,13 +62,13 @@
                                 else.
                             </small>
                         </div>
-                        <div class="form-group col-6 col-xs-12">
+                        <div class="form-group col-md-6 col-sm-12">
                             <label for="phoneNo" class="h6 text-uppercase">Phone</label>
                             <input name="phoneNo" type="text" class="form-control" id="phoneNo" placeholder="Enter phone number">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <div class="form-group col-12">
+                        <div class="form-group col-sm-12">
                             <label for="comment" class="h6 text-uppercase">Comment</label>
                             <textarea name="comment" type="text" class="form-control" id="comment" placeholder="How can we help?"></textarea>
                         </div>
