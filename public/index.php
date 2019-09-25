@@ -70,7 +70,7 @@
                     <div class="form-group row">
                         <div class="form-group col-sm-12">
                             <label for="comment" class="h6 text-uppercase">Comment</label>
-                            <textarea name="comment" type="text" class="form-control" id="comment" placeholder="How can we help?"></textarea>
+                            <textarea name="comment" class="form-control" id="comment" placeholder="How can we help?"></textarea>
                         </div>
                     </div>
                 </div>
