@@ -37,5 +37,7 @@
             'success' => $success,
             'error' => $error,
         ]);
+    } else {
+        header('Location: /');
     }
 ?>
