@@ -24,3 +24,19 @@ function db_fetch_assoc($query)
 {
     return mysqli_fetch_assoc($query);
 }
+
+function sanitizeString(string $value = '') {
+    if(empty($value)) {
+        return null;
+    }
+
+    return $value;
+}
+
+function sanitizeInt($value) {
+    if(empty($value)) {
+        return null;
+    }
+
+    return (int) $value;
+}

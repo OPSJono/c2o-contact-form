@@ -10,17 +10,22 @@
         // $email = isset($input['email']) ? $input['email'] : '';
         // But I find this much nicer to read.
 
-        $category = $input['category'] ?? '';
-        $email = $input['email'] ?? '';
-        $firstName = $input['firstName'] ?? '';
-        $lastName = $input['lastName'] ?? '';
-        $phoneNo = $input['phoneNo'] ?? '';
+        // Integer fields
+        $category = sanitizeInt($input['category'] ?? '');
+        $orderNumber = sanitizeInt($input['orderNumber'] ?? '');
+
+        // String free form fields
+        $email = sanitizeString($input['email'] ?? '');
+        $firstName = sanitizeString($input['firstName'] ?? '');
+        $lastName = sanitizeString($input['lastName'] ?? '');
+        $phoneNo = sanitizeString($input['phoneNo'] ?? '');
+        $comment = sanitizeString($input['comment'] ?? '');
 
         $dbConnection = db_connect();
 
         // Prepare the SQL statement to avoid SQL Injection from the User Input.
-        $sql = $dbConnection->prepare('INSERT INTO contact_form (category_id, email,first_name,last_name,phone) VALUES (?, ?, ?, ?, ?);');
-        $sql->bind_param('issss', $category, $email, $firstName, $lastName, $phoneNo);
+        $sql = $dbConnection->prepare('INSERT INTO contact_form (category_id, order_number, email, first_name, last_name, phone, comment) VALUES (?, ?, ?, ?, ?, ?, ?);');
+        $sql->bind_param('iisssss', $category, $orderNumber, $email, $firstName, $lastName, $phoneNo, $comment);
         $sql->execute();
 
         $error = db_error($dbConnection);
