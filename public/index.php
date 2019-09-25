@@ -75,7 +75,7 @@
                     </div>
                 </div>
                 <div class="card-footer text-muted">
-                    <input type="submit" class="btn btn-primary btn-lg" value="Submit" />
+                    <button type="submit" class="btn btn-primary btn-lg">Submit</button>
                 </div>
             </form>
             <!--END FORM-->
