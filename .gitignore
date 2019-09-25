@@ -4,3 +4,8 @@
 /public/main.js
 /public/css
 /vendor/
+/.vagrant/
+/Vagrantfile
+/vagrant/
+/vmConfigDefaults
+/vmConfigOverrides

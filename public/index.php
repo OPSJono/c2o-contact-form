@@ -1,90 +1,78 @@
 <?php
-    $error = false;
-    $categories = [
-        'Delivery',
-        'Returns & Refunds',
-        'Order Issues',
-        'Payment, Promo & Gift Vouchers',
-        'Technical',
-        'Product & Stock',
-    ];
     require_once('../vendor/autoload.php');
 
-    if (isset($_GET['action']) && $_GET['action'] == 'submit') {
-        $sql = "INSERT INTO contact_form (email,first_name,last_name,phone,reason)
-                VALUES ('{$_GET['emails']}','{$_GET['firstName']}','{$_GET['lastName']}','{$_GET['phone_no']}','{$_GET['category']}')";
+    $dbConnection = db_connect();
+    $sql = 'select id, name from categories;';
+    $categories = db_query($sql, $dbConnection);
 
-        $result = db_query($sql, db_connect());
-
-        if ($result === false) {
-            $error = true;
-        }
-    }
 ?>
 
 <!doctype html>
-<html>
+<html lang="en">
 <head>
-    <title>Form</title>
+    <title>Contact Us</title>
     <link rel="stylesheet" href="css/style.min.css">
 </head>
 <body>
-<div class="container">
-    <div class="card my-5">
-        <!--START FORM-->
-        <form>
-            <div class="card-body">
-                <h1>Send us an email!</h1>
-                <?= $error ? '<h1 style="color: red">Error</h1>' : '' ?>
-                <hr/>
-                <div class="form-group form-group-md">
-                    <label for="select1" class="h6 text-uppercase">What is your question about?</label>
-                    <select name="category" class="form-control" id="select1">
-                        <option>Please Select</option>
-                        <?php foreach ($categories as $category) {
-                            echo '<option>'.$category.'</option>';
-                        } ?>
-                    </select>
-                </div>
-                <hr/>
-                <h3>About you</h3>
-                <div class="form-group form-group-md">
-                    <div class="form-group">
-                        <label for="inputEmail1" class="h6 text-uppercase">Email address</label>
-                        <input name="email" class="form-control" id="inputEmail1" aria-describedby="emailHelp"
-                               placeholder="Enter email">
-                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
-                            else.
-                        </small>
+    <div class="container">
+        <div class="card my-5">
+            <!--START FORM-->
+            <form action="/ajax.php" method="post" class="js-form-submit">
+                <div class="card-body">
+                    <h1>Send us an email!</h1>
+                    <h3 class="js-has-error text-danger" style="display: none;">Whoops! There was an error submitting the form. Please try again later.</h3>
+                    <h3 class="js-has-success text-success" style="display: none;">Success! Thanks for getting in touch, we will get back to you as soon as we can.</h3>
+                    <h3 class="js-has-saving text-info" style="display: none;">Saving...</h3>
+                    <hr/>
+                    <div class="form-group form-group-md">
+                        <label for="category" class="h6 text-uppercase">What is your question about?</label>
+                        <select name="category" class="form-control" id="category">
+                            <option>Please Select</option>
+                            <?php if(isset($categories) && $categories != false) {
+                                while ($row = $categories->fetch_assoc()) {
+                                    echo '<option value="'.$row['id'].'">'.$row['name'].'</option>';
+                                }
+                            } ?>
+                        </select>
+                    </div>
+                    <hr/>
+                    <h3>About you</h3>
+                    <div class="form-group form-group-md">
+                        <div class="form-group">
+                            <label for="email" class="h6 text-uppercase">Email address</label>
+                            <input name="email" class="form-control" id="email" aria-describedby="emailHelp"
+                                   placeholder="Enter email address">
+                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
+                                else.
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-md">
+                        <div class="form-group">
+                            <label for="firstName" class="h6 text-uppercase">First name</label>
+                            <input name="firstName" type="text" class="form-control" id="firstName" placeholder="Enter first name">
+                        </div>
+                    </div>
+                    <div class="form-group form-group-md">
+                        <div class="form-group">
+                            <label for="lastName" class="h6 text-uppercase">Last name</label>
+                            <input name="lastName" type="text" class="form-control" id="lastName" placeholder="Enter last name">
+                        </div>
+                    </div>
+                    <div class="form-group form-group-md">
+                        <div class="form-group">
+                            <label for="phoneNo" class="h6 text-uppercase">Phone</label>
+                            <input name="phoneNo" type="text" class="form-control" id="phoneNo" placeholder="Enter phone number">
+                        </div>
                     </div>
                 </div>
-                <div class="form-group form-group-md">
-                    <div class="form-group">
-                        <label for="inputName" class="h6 text-uppercase">First name</label>
-                        <input name="firstName" type="text" class="form-control" id="inputName" placeholder="Enter name">
-                    </div>
+                <div class="card-footer text-muted">
+                    <input type="submit" class="btn btn-primary btn-lg" value="Submit" />
                 </div>
-                <div class="form-group form-group-md">
-                    <div class="form-group">
-                        <label for="inputLastName" class="h6 text-uppercase">Last name</label>
-                        <input name="lastName" type="text" class="form-control" id="inputLastName" placeholder="Enter last name">
-                    </div>
-                </div>
-                <div class="form-group form-group-md">
-                    <div class="form-group">
-                        <label for="inputName" class="h6 text-uppercase">Phone</label>
-                        <input name="phone" type="text" class="form-control" id="inputPhone" placeholder="Enter phone">
-                    </div>
-                </div>
-            </div>
-            <div class="card-footer text-muted">
-                <input type="submit" class="btn btn-primary btn-lg" value="Submit" />
-                <input type="hidden" name="action" value="submit" />
-            </div>
-        </form>
-        <!--END FORM-->
+            </form>
+            <!--END FORM-->
+        </div>
     </div>
-</div>
-<script src="main.js"></script>
+    <script src="index.js"></script>
 </body>
 </html>

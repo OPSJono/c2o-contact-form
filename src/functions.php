@@ -7,7 +7,12 @@
 
 function db_connect()
 {
-    return mysqli_connect('127.0.0.1', 'homestead', 'secret', 'devtest');
+    return mysqli_connect('127.0.0.1', 'root', 'reverse', 'cto');
+}
+
+function db_error($connection)
+{
+    return mysqli_error($connection);
 }
 
 function db_query($sql, $link)
