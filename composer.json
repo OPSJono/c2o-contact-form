@@ -1,0 +1,8 @@
+{
+    "name": "vagrant/c2o-dev-test-form",
+    "require": {},
+    "autoload": {
+        "psr-4": { "App\\":  "src/"},
+        "files": [ "src/functions.php" ]
+    }
+}
