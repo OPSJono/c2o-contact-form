@@ -17,7 +17,7 @@ class Helpers {
 
     }
 
-    public static function validateEmail(string $email)
+    public static function validateEmail(?string $email = null)
     {
         filter_var(trim($email), FILTER_VALIDATE_EMAIL);
         if(empty($email)) {
@@ -27,7 +27,7 @@ class Helpers {
         return $email;
     }
 
-    public static function sanitizeString(string $value)
+    public static function sanitizeString(?string $value = null)
     {
         $value = filter_var(trim($value));
         if(empty($value)) {
@@ -37,7 +37,7 @@ class Helpers {
         return $value;
     }
 
-    public static function sanitizeInt($value)
+    public static function sanitizeInt($value = null)
     {
         $value = filter_var(trim($value), FILTER_VALIDATE_INT);
         if(empty($value)) {
