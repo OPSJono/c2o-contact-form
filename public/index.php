@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $phoneNo = Helpers::sanitizeString($input['phoneNo'] ?? '');
     $comment = Helpers::sanitizeString($input['comment'] ?? '');
 
-    // Get the list of all categories
+    // Find the selected Category and make sure it exists.
     $category = new Category($db);
     $category = $category->find($categoryId);
 

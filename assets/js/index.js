@@ -39,6 +39,17 @@ $(document).ready(function() {
                 if(response.success !== true) {
                     console.error(response);
                     cardBody.prepend(errorAlert);
+
+                    if(Object.keys(response.errors).length > 0) {
+                        // If there are validation errors, which got through the HTML validation and PHP has rejected them
+                        // Show them to the user, so they can be corrected and re-submitted.
+                        let errors = '<ul class="list-group mt-3">';
+                        $.each(response.errors, function (key, value) {
+                            errors += '<li class="ml-5">'+value+'</li>';
+                        });
+                        errors += '</ul>';
+                        cardBody.find('.alert-dismissible').append(errors);
+                    }
                 } else {
                     cardBody.prepend(successAlert);
                     form[0].reset();
