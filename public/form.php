@@ -3,7 +3,6 @@
 <head>
     <title>Contact Us</title>
     <link rel="stylesheet" href="css/style.min.css">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
 </head>
 <body>
@@ -15,14 +14,6 @@
                 <h1>Send us an email!</h1>
             </div>
             <div class="card-body">
-                <div class="row">
-                    <div class="col-md-12 alert alert-success js-form-error hidden">
-                        Thank you for contacting us, we aim to reply to all queries within 24 hours.
-                    </div>
-                    <div class="col-md-12 alert alert-danger js-form-success hidden">
-                        There was a problem saving the form, please correct the errors below and try again.
-                    </div>
-                </div>
                 <div class="row">
                     <div class="form-group col-md-6 col-sm-12">
                         <label for="categoryId" class="h6 text-uppercase">What is your question about?</label>
@@ -79,6 +70,6 @@
         <!--END FORM-->
     </div>
 </div>
-<script src="index.js"></script>
+<script src="js/index.js"></script>
 </body>
 </html>

@@ -4,9 +4,9 @@ window.$ 		= jQuery;
 window.jQuery 	= jQuery;
 import 'bootstrap';
 import selectpicker from 'bootstrap-select';
-import "./css/app.scss";
+import "../css/app.scss";
 
-function init() {
+$(document).ready(function() {
 
     $('.selectpicker').selectpicker();
 
@@ -21,9 +21,7 @@ function init() {
         const submitButton = form.find('button[type="submit"]');
         const originalSubmitHtml = submitButton.html();
 
-        const dismissButton = '<button type="button" class="close" data-dismiss="alert" aria-label="Close">\n' +
-            '    <span aria-hidden="true">&times;</span>\n' +
-            '  </button>';
+        const dismissButton = '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
         const errorAlert = '<div class="alert alert-danger alert-dismissible fade show" role="alert">'+dismissButton+'<i class="fa fa-exclamation-circle"></i> Whoops! It looks like something went wrong. Please try again later.</div>';
         const successAlert = '<div class="alert alert-success alert-dismissible fade show" role="alert">'+dismissButton+'<i class="fa fa-check-circle"></i> Thanks for getting in touch. We will get back to you as soon as we can.</div>';
 
@@ -32,7 +30,7 @@ function init() {
             data: data,
             dataType: 'JSON',
             beforeSend: function(xhr) {
-                const savingSpinner = 'Saving... <i class="fa fa-spin fa-spinner">';
+                const savingSpinner = 'Saving...&nbsp;<i class="fa fa-spin fa-spinner"></i>';
                 submitButton.html(savingSpinner);
                 $('.alert-dismissible').remove();
             },
@@ -56,8 +54,4 @@ function init() {
             },
         })
     });
-}
-
-$(document).ready(function() {
-    init();
 });
