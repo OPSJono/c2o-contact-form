@@ -2,72 +2,56 @@ import _ from 'lodash';
 import jQuery from 'jquery'
 window.$ 		= jQuery;
 window.jQuery 	= jQuery;
-// import 'bootstrap'; ///add the full javascript functions for bootstrap 4 (if you need it)
+import 'bootstrap';
+import selectpicker from 'bootstrap-select';
 import "./css/app.scss";
 
 function init() {
-    const showError = function() {
-        $('.js-has-error').show();
-    };
 
-    const hideError = function() {
-        $('.js-has-error').hide();
-    };
-
-    const hideSuccess = function() {
-        $('.js-has-success').hide();
-    };
-
-    const showSuccess = function() {
-        $('.js-has-success').show();
-    };
-
-    const showSaving = function() {
-        $('.js-has-saving').show();
-    };
-
-    const hideSaving = function() {
-        $('.js-has-saving').hide();
-    };
-
-    const resetForm = function() {
-        $('.js-form-submit')[0].reset();
-    };
+    $('.selectpicker').selectpicker();
 
     $('.js-form-submit').on('submit', function(e) {
         e.preventDefault();
 
-        let form = $(this);
-        let data = form.serialize();
-        let url = form.prop('action');
+        const form = $(this);
+        const data = form.serialize();
+        const url = form.prop('action');
+        const cardBody = $('.card-body');
+
+        const submitButton = form.find('button[type="submit"]');
+        const originalSubmitHtml = submitButton.html();
+
+        const dismissButton = '<button type="button" class="close" data-dismiss="alert" aria-label="Close">\n' +
+            '    <span aria-hidden="true">&times;</span>\n' +
+            '  </button>';
+        const errorAlert = '<div class="alert alert-danger alert-dismissible fade show" role="alert">'+dismissButton+'<i class="fa fa-exclamation-circle"></i> Whoops! It looks like something went wrong. Please try again later.</div>';
+        const successAlert = '<div class="alert alert-success alert-dismissible fade show" role="alert">'+dismissButton+'<i class="fa fa-check-circle"></i> Thanks for getting in touch. We will get back to you as soon as we can.</div>';
 
         $.ajax(url, {
             method: 'POST',
             data: data,
             dataType: 'JSON',
             beforeSend: function(xhr) {
-                showSaving();
+                const savingSpinner = 'Saving... <i class="fa fa-spin fa-spinner">';
+                submitButton.html(savingSpinner);
+                $('.alert-dismissible').remove();
             },
             success: function(response) {
-                hideSaving();
-
                 // If we have a 200 response code, but PHP tells us it has failed
                 if(response.success !== true) {
-                    hideSuccess();
-                    showError();
                     console.error(response);
+                    cardBody.prepend(errorAlert);
                 } else {
-                    // Successful response
-                    hideError();
-                    showSuccess();
-                    resetForm();
+                    cardBody.prepend(successAlert);
+                    form[0].reset();
+                    $('.selectpicker').selectpicker('refresh');
                 }
+                submitButton.html(originalSubmitHtml);
             },
             // A non-200 response code.
             error: function(response) {
-                hideSaving();
-                hideSuccess();
-                showError();
+                cardBody.prepend(errorAlert);
+                submitButton.html(originalSubmitHtml);
                 console.error(response);
             },
         })
