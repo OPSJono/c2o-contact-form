@@ -12,10 +12,10 @@ class ContactForm extends BaseModel {
         $categoryId = Helpers::sanitizeInt($categoryId);
         $email = Helpers::validateEmail($email);
         $orderNumber = Helpers::sanitizeInt($orderNumber);
-        $firstName = Helpers::sanitizeInt($firstName);
-        $lastName = Helpers::sanitizeInt($lastName);
-        $phone = Helpers::sanitizeInt($phone);
-        $comment = Helpers::sanitizeInt($comment);
+        $firstName = Helpers::sanitizeString($firstName);
+        $lastName = Helpers::sanitizeString($lastName);
+        $phone = Helpers::sanitizeString($phone);
+        $comment = Helpers::sanitizeString($comment);
 
         $statement = $this->connection->prepare('INSERT INTO `contact_form` (`category_id`, `email`, `order_number`, `first_name`, `last_name`, `phone`, `comment`) 
                                                             VALUES (:category_id, :email, :order_number, :first_name, :last_name, :phone, :comment_value);');

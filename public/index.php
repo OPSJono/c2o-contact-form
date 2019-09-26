@@ -35,11 +35,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $category = new Category($db);
     $category = $category->find($categoryId);
 
+    // Set any user input validation errors
     if ($category === false) {
         $errors['categoryId'] = "Please select a Category";
     }
 
-    if($email === false) {
+    if(is_null($email)) {
         $errors['email'] = "Please provide a valid email address";
     }
 

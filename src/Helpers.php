@@ -19,31 +19,31 @@ class Helpers {
 
     public static function validateEmail(string $email)
     {
-        $email = trim($email);
+        filter_var(trim($email), FILTER_VALIDATE_EMAIL);
         if(empty($email)) {
-            return false;
+            return null;
         }
 
-        return filter_var($email, FILTER_VALIDATE_EMAIL);
+        return $email;
     }
 
     public static function sanitizeString(string $value)
     {
-        $value = trim($value);
+        $value = filter_var(trim($value));
         if(empty($value)) {
             return null;
         }
 
-        return filter_var($value);
+        return $value;
     }
 
     public static function sanitizeInt($value)
     {
-        $value = trim($value);
+        $value = filter_var(trim($value), FILTER_VALIDATE_INT);
         if(empty($value)) {
             return null;
         }
 
-        return filter_var($value, FILTER_VALIDATE_INT);
+        return $value;
     }
 }
