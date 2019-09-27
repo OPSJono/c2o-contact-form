@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <title>Contact Us</title>
-    <link rel="stylesheet" href="css/style.min.css">
+    <link rel="stylesheet" href="/css/style.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
 </head>
 <body>
@@ -19,11 +19,9 @@
                         <label for="categoryId" class="h6 text-uppercase">What is your question about?</label>
                         <select name="categoryId" required class="form-control selectpicker" id="categoryId">
                             <option value="">Please Select</option>
-                            <?php if(isset($categories) && is_array($categories)): ?>
-                                <?php foreach($categories as $key => $row): ?>
-                                    <option value="<?php echo $row['id'] ?? '' ?>"><?php echo $row['name'] ?? '' ?></option>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
+                            {% for row in categories %}
+                                <option value="{{ row.id }}">{{ row.name }}</option>
+                            {% endfor %}
                         </select>
                     </div>
                     <div class="form-group col-md-6 col-sm-12">
@@ -70,6 +68,6 @@
         <!--END FORM-->
     </div>
 </div>
-<script src="js/index.js"></script>
+<script src="/js/index.js"></script>
 </body>
 </html>

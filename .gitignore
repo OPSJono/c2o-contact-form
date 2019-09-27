@@ -1,8 +1,9 @@
 /.idea/
 /Projects - Shortcut.lnk
 /node_modules
-/public/main.js
+/public/js
 /public/css
+/public/cache
 /vendor/
 /.vagrant/
 /Vagrantfile

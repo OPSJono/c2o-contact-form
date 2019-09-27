@@ -3,6 +3,9 @@ use \App\Helpers;
 use \App\Models\Category;
 use App\Models\ContactForm;
 
+use \Twig\Loader\FilesystemLoader;
+use \Twig\Environment;
+
 require_once('../vendor/autoload.php');
 
 $db = Helpers::db_connect();
@@ -60,6 +63,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Get the list of all categories
     $categories = $category->all();
 
-    // Show the form
-    include_once 'form.php';
+    // Load Twig.
+    $loader = new FilesystemLoader(getcwd().DIRECTORY_SEPARATOR.'views');
+    $twig = new Environment($loader, [
+        'cache' => getcwd().DIRECTORY_SEPARATOR.'cache',
+    ]);
+
+    // Render the form.
+    echo $twig->render('form.html', [
+        'categories' => $categories,
+    ]);
 }
