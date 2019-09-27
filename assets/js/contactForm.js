@@ -8,8 +8,9 @@ const ContactForm = function() {
 
     'use strict';
 
+    const container = $('#contactFormContainer');
     const form = $('#submitForm');
-    const cardBody = $('.card-body');
+    const cardBody = container.find('.card-body');
 
     const submitButton = form.find('button[type="submit"]');
     const originalSubmitHtml = submitButton.html();
@@ -67,7 +68,7 @@ const ContactForm = function() {
     };
 
     this.init = function() {
-        $('#contactFormContainer').removeClass('hidden');
+        container.removeClass('hidden');
         $('.selectpicker').selectpicker();
 
         eventListeners();

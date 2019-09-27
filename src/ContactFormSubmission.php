@@ -23,6 +23,7 @@ class ContactFormSubmission {
         $twigLoader = new FilesystemLoader(getcwd().DIRECTORY_SEPARATOR.'views');
         $this->twig = new Environment($twigLoader, [
             'cache' => getcwd().DIRECTORY_SEPARATOR.'cache',
+            'auto_reload' => true,
         ]);
     }
 

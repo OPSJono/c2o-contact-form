@@ -72,7 +72,7 @@
                     <div class="form-group col-md-6 col-sm-12">
                         <label for="categoryId" class="h6 text-uppercase">What is your question about?</label>
                         <select name="categoryId" required class="form-control selectpicker" id="categoryId">
-                            <option value="">Please Select</option>
+                            <option value="">Select a Category</option>
                             {% for row in categories %}
                                 <option value="{{ row.id }}">{{ row.name }}</option>
                             {% endfor %}
