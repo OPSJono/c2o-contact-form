@@ -5,17 +5,25 @@ namespace App;
 use App\Models\Category;
 use App\Models\ContactForm;
 use App\Models\Person;
-use \PDO;
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 
 class ContactFormSubmission {
 
     protected $connection;
+    protected $twig;
+
     protected $success = false;
     protected $errors = [];
 
-    public function __construct(PDO $db)
+    public function __construct()
     {
-        $this->connection = $db;
+        $this->connection = Helpers::db_connect();
+
+        $twigLoader = new FilesystemLoader(getcwd().DIRECTORY_SEPARATOR.'views');
+        $this->twig = new Environment($twigLoader, [
+            'cache' => getcwd().DIRECTORY_SEPARATOR.'cache',
+        ]);
     }
 
     public function getSuccess()
@@ -36,6 +44,17 @@ class ContactFormSubmission {
     public function setErrors(array $errors)
     {
         $this->errors = $errors;
+    }
+
+    public function handleGetRequest()
+    {
+        $category = new Category($this->connection);
+        $categories = $category->all();
+
+        // Render the form.
+        return $this->twig->render('form.html', [
+            'categories' => $categories,
+        ]);
     }
 
     public function handlePostRequest()
