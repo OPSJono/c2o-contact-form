@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Helpers;
+use \App\Helpers;
 use \PDO;
 
 class Category extends BaseModel {

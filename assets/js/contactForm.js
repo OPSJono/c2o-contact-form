@@ -11,6 +11,7 @@ import selectpicker from 'bootstrap-select';
     const contactForm = function() {
 
         this.init = function() {
+            $('.js-contact-form').removeClass('hidden');
             $('.selectpicker').selectpicker();
 
             this.eventListeners();

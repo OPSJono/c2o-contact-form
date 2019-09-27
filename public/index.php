@@ -1,7 +1,7 @@
 <?php
 use \App\Helpers;
+use \App\ContactFormSubmission;
 use \App\Models\Category;
-use App\Models\ContactForm;
 
 use \Twig\Loader\FilesystemLoader;
 use \Twig\Environment;
@@ -10,48 +10,13 @@ require_once('../vendor/autoload.php');
 
 $db = Helpers::db_connect();
 
-// Instantiate the Category model as it is used in both the GET and POST.
-$category = new Category($db);
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Handle the POST request
-    $success = false;
-    $input = $_POST;
+    $submission = new ContactFormSubmission($db);
+    $submission->handlePostRequest();
 
-    $errors = [];
-
-    // Using PHP 7+ syntax here.
-    // If Stuck with a version of PHP before 7.0 I would use the traditional isset() ? :
-    // $email = isset($input['email']) ? $input['email'] : '';
-    // But I find this much nicer to read.
-
-    // Trim and filter the values from the input.
-    $categoryId = Helpers::sanitizeInt($input['categoryId'] ?? '');
-    $email = Helpers::validateEmail($input['email'] ?? '');
-    $orderNumber = Helpers::sanitizeInt($input['orderNumber'] ?? '');
-    $firstName = Helpers::sanitizeString($input['firstName'] ?? '');
-    $lastName = Helpers::sanitizeString($input['lastName'] ?? '');
-    $phoneNo = Helpers::sanitizeString($input['phoneNo'] ?? '');
-    $comment = Helpers::sanitizeString($input['comment'] ?? '');
-
-    // Find the selected Category and make sure it exists.
-    $category = new Category($db);
-    $category = $category->find($categoryId);
-
-    // Set any user input validation errors
-    if ($category === false) {
-        $errors['categoryId'] = "Please select a Category";
-    }
-
-    if(is_null($email)) {
-        $errors['email'] = "Please provide a valid email address";
-    }
-
-    if(empty($errors)) {
-        // Insert the new record.
-        $form = new ContactForm($db);
-        $success = $form->insert($categoryId, $email, $orderNumber, $firstName, $lastName, $phoneNo, $comment);
-    }
+    $success = $submission->getSuccess();
+    $errors = $submission->getErrors();
 
     echo json_encode([
         'success' => $success,
@@ -61,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Handle GET request
 
     // Get the list of all categories
+    $category = new Category($db);
     $categories = $category->all();
 
     // Load Twig.
