@@ -2,6 +2,9 @@
 
 namespace App;
 
+use \RuntimeException;
+use \PDO;
+
 use App\Models\Category;
 use App\Models\ContactForm;
 use App\Models\Person;
@@ -27,6 +30,10 @@ class ContactFormSubmission {
             'cache' => getcwd().DIRECTORY_SEPARATOR.'cache',
             'auto_reload' => true,
         ]);
+
+        if(!$this->connection instanceof PDO) {
+            throw new RuntimeException("Unable to connect to the database. Please make sure the Database exists and the connection details are correct.", 500);
+        }
     }
 
     public function handleGetRequest()
