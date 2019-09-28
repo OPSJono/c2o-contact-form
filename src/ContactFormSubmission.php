@@ -55,21 +55,31 @@ class ContactFormSubmission {
         $success = false;
         $errors = [];
 
-        // Using PHP 7+ syntax here.
-        // If Stuck with a version of PHP before 7.0 I would use the traditional isset() ? :
-        // $email = isset($input['email']) ? $input['email'] : '';
-        // But I find this much nicer to read.
-
         // Trim and filter the values from the input.
-        $categoryId = Helpers::sanitizeInt($input['categoryId'] ?? '');
-        $email = Helpers::validateEmail($input['email'] ?? '');
-        $orderNumber = Helpers::sanitizeInt($input['orderNumber'] ?? '');
-        $firstName = Helpers::sanitizeString($input['firstName'] ?? '');
-        $lastName = Helpers::sanitizeString($input['lastName'] ?? '');
-        $phoneNo = Helpers::sanitizeString($input['phoneNo'] ?? '');
-        $comment = Helpers::sanitizeString($input['comment'] ?? '');
+        $categoryId = Helpers::arrayGet($input, 'categoryId');
+        $categoryId = Helpers::sanitizeInt($categoryId);
 
-        $noScript = Helpers::sanitizeBool((bool) $input['noScript'] ?? false);
+        $email = Helpers::arrayGet($input, 'email');
+        $email = Helpers::validateEmail($email);
+
+        $orderNumber = Helpers::arrayGet($input, 'orderNumber');
+        $orderNumber = Helpers::sanitizeInt($orderNumber);
+
+        $firstName = Helpers::arrayGet($input, 'firstName');
+        $firstName = Helpers::sanitizeString($firstName);
+
+        $lastName = Helpers::arrayGet($input, 'lastName');
+        $lastName = Helpers::sanitizeString($lastName);
+
+        $phoneNo = Helpers::arrayGet($input, 'phoneNo');
+        $phoneNo = Helpers::sanitizeString($phoneNo);
+
+        $comment = Helpers::arrayGet($input, 'comment');
+        $comment = Helpers::sanitizeString($comment);
+
+
+        $noScript = Helpers::arrayGet($input, 'noScript');
+        $noScript = Helpers::sanitizeBool((bool) $noScript);
         $this->setNoScript($noScript);
 
         // Set any user input validation errors

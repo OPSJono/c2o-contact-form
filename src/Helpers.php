@@ -56,4 +56,13 @@ class Helpers {
 
         return $value;
     }
+
+    public static function arrayGet(array $array, string $key, $default = null)
+    {
+        if(array_key_exists($key, $array)) {
+            return $array[$key];
+        }
+
+        return $default;
+    }
 }
