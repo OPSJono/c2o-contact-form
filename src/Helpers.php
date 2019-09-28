@@ -46,4 +46,14 @@ class Helpers {
 
         return $value;
     }
+
+    public static function sanitizeBool($value = false)
+    {
+        $value = filter_var($value, FILTER_VALIDATE_BOOLEAN);
+        if(empty($value)) {
+            return false;
+        }
+
+        return $value;
+    }
 }

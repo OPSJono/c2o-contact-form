@@ -7,15 +7,26 @@ $form = new ContactFormSubmission();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Handle the POST request
-    $form->handlePostRequest();
+    $input = $_POST;
+    $form->handlePostRequest($input);
 
     $success = $form->getSuccess();
     $errors = $form->getErrors();
 
-    echo json_encode([
-        'success' => $success,
-        'errors' => $errors,
-    ]);
+    if($form->getNoScript() !== false) {
+        // If the client doesn't have Javascript enabled, rerender the form.
+        if($success === true) {
+            // Clear the input fields if we have saved the form successfully.
+            $form->setInput([]);
+        }
+        echo $form->handleGetRequest();
+    } else {
+        // Otherwise respond to the ajax request.
+        echo json_encode([
+            'success' => $success,
+            'errors' => $errors,
+        ]);
+    }
 } else {
     // Handle GET request
     // Render the form.

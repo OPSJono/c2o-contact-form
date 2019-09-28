@@ -13,8 +13,10 @@ class ContactFormSubmission {
     protected $connection;
     protected $twig;
 
-    protected $success = false;
+    protected $noScript = false;
+    protected $success = null;
     protected $errors = [];
+    protected $input = [];
 
     public function __construct()
     {
@@ -27,43 +29,24 @@ class ContactFormSubmission {
         ]);
     }
 
-    public function getSuccess()
-    {
-        return $this->success;
-    }
-
-    public function getErrors()
-    {
-        return $this->errors;
-    }
-
-    public function setSuccess(bool $success)
-    {
-        $this->success = $success;
-    }
-
-    public function setErrors(array $errors)
-    {
-        $this->errors = $errors;
-    }
-
     public function handleGetRequest()
     {
         $category = new Category($this->connection);
         $categories = $category->all();
 
         // Render the form.
-        return $this->twig->render('form.html', [
+        return $this->twig->render('form.html.twig', [
             'categories' => $categories,
+            'success' => $this->getSuccess(),
+            'errors' => $this->getErrors(),
+            'input' => $this->getInput(),
         ]);
     }
 
-    public function handlePostRequest()
+    public function handlePostRequest(array $input = [])
     {
         $success = false;
         $errors = [];
-
-        $input = $_POST;
 
         // Using PHP 7+ syntax here.
         // If Stuck with a version of PHP before 7.0 I would use the traditional isset() ? :
@@ -79,13 +62,20 @@ class ContactFormSubmission {
         $phoneNo = Helpers::sanitizeString($input['phoneNo'] ?? '');
         $comment = Helpers::sanitizeString($input['comment'] ?? '');
 
-        // Find the selected Category and make sure it exists.
-        $category = new Category($this->connection);
-        $category = $category->find($categoryId);
+        $noScript = Helpers::sanitizeBool((bool) $input['noScript'] ?? false);
+        $this->setNoScript($noScript);
 
         // Set any user input validation errors
-        if ($category === false) {
+        if(is_null($categoryId)) {
             $errors['categoryId'] = "Please select a Category";
+        } else {
+            // Find the selected Category and make sure it exists.
+            $category = new Category($this->connection);
+            $category = $category->find($categoryId);
+
+            if ($category === false) {
+                $errors['categoryId'] = "Please select a Category";
+            }
         }
 
         if(is_null($email)) {
@@ -93,11 +83,11 @@ class ContactFormSubmission {
         }
 
         if(is_null($firstName)) {
-            $errors['firstName'] = "Please provide your given name";
+            $errors['firstName'] = "Please provide your first name";
         }
 
         if(is_null($lastName)) {
-            $errors['lastName'] = "Please provide your family name";
+            $errors['lastName'] = "Please provide your last name";
         }
 
         if(is_null($comment)) {
@@ -126,7 +116,48 @@ class ContactFormSubmission {
             }
         }
 
+        $this->setInput($input);
         $this->setSuccess($success);
         $this->setErrors($errors);
+    }
+
+    public function getNoScript()
+    {
+        return $this->noScript;
+    }
+
+    public function setNoScript(bool $noScript)
+    {
+        $this->noScript = $noScript;
+    }
+
+    public function getSuccess()
+    {
+        return $this->success;
+    }
+
+    public function setSuccess(bool $success)
+    {
+        $this->success = $success;
+    }
+
+    public function getErrors()
+    {
+        return $this->errors;
+    }
+
+    public function setErrors(array $errors)
+    {
+        $this->errors = $errors;
+    }
+
+    public function getInput()
+    {
+        return $this->input;
+    }
+
+    public function setInput(array $input)
+    {
+        $this->input = $input;
     }
 }

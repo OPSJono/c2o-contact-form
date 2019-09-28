@@ -8,19 +8,18 @@ const ContactForm = function() {
 
     'use strict';
 
-    const container = $('#contactFormContainer');
-    const form = $('#submitForm');
-    const cardBody = container.find('.card-body');
+    const form = $('#contactForm');
+    const formCard = $('#formCard');
 
     const submitButton = form.find('button[type="submit"]');
     const originalSubmitHtml = submitButton.html();
 
     const dismissButton = '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
-    const errorAlert = '<div class="alert alert-danger alert-dismissible fade show" role="alert">'+dismissButton+'<i class="fa fa-exclamation-circle"></i> Whoops! It looks like something went wrong. Please try again later.</div>';
+    const errorAlert = '<div class="alert alert-danger alert-dismissible fade show" role="alert">'+dismissButton+'<i class="fa fa-exclamation-circle"></i> Whoops! It looks like something went wrong. Please correct any errors listed and try again.</div>';
     const successAlert = '<div class="alert alert-success alert-dismissible fade show" role="alert">'+dismissButton+'<i class="fa fa-check-circle"></i> Thanks for getting in touch. We will get back to you as soon as we can.</div>';
 
     function eventListeners() {
-        $('#contactForm').submit(function(e) {
+        form.submit(function(e) {
             e.preventDefault();
 
             const data = form.serialize();
@@ -38,7 +37,7 @@ const ContactForm = function() {
                     // If we have a 200 response code, but PHP tells us it has failed
                     if(response.success !== true) {
                         console.error(response);
-                        cardBody.prepend(errorAlert);
+                        formCard.prepend(errorAlert);
 
                         if(Object.keys(response.errors).length > 0) {
                             // If there are validation errors, which got through the HTML validation and PHP has rejected them
@@ -48,10 +47,10 @@ const ContactForm = function() {
                                 errors += '<li class="ml-5">'+value+'</li>';
                             });
                             errors += '</ul>';
-                            cardBody.find('.alert-dismissible').append(errors);
+                            formCard.find('.alert-dismissible').append(errors);
                         }
                     } else {
-                        cardBody.prepend(successAlert);
+                        formCard.prepend(successAlert);
                         form[0].reset();
                         $('.selectpicker').selectpicker('refresh');
                     }
@@ -59,7 +58,7 @@ const ContactForm = function() {
                 },
                 // A non-200 response code.
                 error: function(response) {
-                    cardBody.prepend(errorAlert);
+                    formCard.prepend(errorAlert);
                     submitButton.html(originalSubmitHtml);
                     console.error(response);
                 },
@@ -68,8 +67,7 @@ const ContactForm = function() {
     };
 
     this.init = function() {
-        container.removeClass('hidden');
-        $('.selectpicker').selectpicker();
+        $('#categoryId').addClass('selectpicker').selectpicker();
 
         eventListeners();
     };
