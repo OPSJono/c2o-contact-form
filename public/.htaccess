@@ -1,0 +1,14 @@
+<Files .htaccess>
+Order allow,deny
+Deny from all
+</Files>
+
+<Files views/*>
+Order allow,deny
+Deny from all
+</Files>
+
+<Files cache/*>
+Order allow,deny
+Deny from all
+</Files>

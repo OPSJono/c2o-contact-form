@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack'); //to access built-in plugins
 const MiniCssExtractPlugin  = require("mini-css-extract-plugin");
+const CopyWebpackPlugin  = require("copy-webpack-plugin");
 
 (function () {
     'use strict';
@@ -8,9 +9,9 @@ const MiniCssExtractPlugin  = require("mini-css-extract-plugin");
 
 module.exports = {
     watch: true,
-    entry: './assets/index.js',
+    entry: './assets/js/index.js',
     output: {
-        filename: 'index.js',
+        filename: 'js/index.js',
         path: path.resolve(__dirname, 'public')
     },
     module: {
@@ -43,6 +44,12 @@ module.exports = {
                 minimize: true
             }
         }),
+        new CopyWebpackPlugin([
+            {
+                from: './assets/favicons',
+                to: 'favicons'
+            }
+        ]),
     ]
 };
 
