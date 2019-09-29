@@ -1,41 +1,22 @@
 <?php
-use \App\ContactFormSubmission;
+use \App\Controllers\ContactFormSubmissionController;
 
 require_once('../vendor/autoload.php');
 
 try {
-    $form = new ContactFormSubmission();
+    // Instantiate the controller to handle the request.
+    $form = new ContactFormSubmissionController();
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
         // Handle the POST request
         $input = $_POST;
-        $form->handlePostRequest($input);
-
-        $success = $form->getSuccess();
-        $errors = $form->getErrors();
-
-        if($form->getNoScript() !== false) {
-            // If the client doesn't have Javascript enabled, rerender the form.
-            if($success === true) {
-                // Clear the input fields if we have saved the form successfully.
-                $form->setInput([]);
-            }
-            echo $form->handleGetRequest();
-        } else {
-            // Otherwise respond to the ajax request.
-            echo json_encode([
-                'success' => $success,
-                'errors' => $errors,
-            ]);
-        }
+        echo $form->handlePostRequest($input);
     } else {
         // Handle GET request
-        // Render the form.
         echo $form->handleGetRequest();
     }
 } catch (\Error $exception) {
-    include_once 'views/error.php';
+    include_once 'error.php';
 } catch (\Throwable $exception) {
-    include_once 'views/error.php';
+    include_once 'error.php';
 }
