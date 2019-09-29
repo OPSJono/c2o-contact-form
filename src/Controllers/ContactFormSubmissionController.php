@@ -1,33 +1,65 @@
 <?php
 
-namespace App;
+namespace App\Controllers;
 
 use \RuntimeException;
 use \PDO;
 
-use App\Models\Category;
-use App\Models\ContactForm;
-use App\Models\Person;
+use \App\Helpers;
+
+use \App\Models\Category;
+use \App\Models\ContactForm;
+use \App\Models\Person;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
-class ContactFormSubmission {
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
+
+/**
+ * Class ContactFormSubmissionController
+ * @package App\Controllers
+ */
+class ContactFormSubmissionController {
+
+    /**
+     * @var bool|PDO
+     */
     protected $connection;
+    /**
+     * @var Environment
+     */
     protected $twig;
 
+    /**
+     * @var bool
+     */
     protected $noScript = false;
+    /**
+     * @var null
+     */
     protected $success = null;
+    /**
+     * @var array
+     */
     protected $errors = [];
+    /**
+     * @var array
+     */
     protected $input = [];
 
+    /**
+     * ContactFormSubmissionController constructor.
+     */
     public function __construct()
     {
         $this->connection = Helpers::db_connect();
 
-        $twigLoader = new FilesystemLoader(getcwd().DIRECTORY_SEPARATOR.'views');
+        $twigLoader = new FilesystemLoader('../src/Views');
         $this->twig = new Environment($twigLoader, [
-            'cache' => getcwd().DIRECTORY_SEPARATOR.'cache',
+            'cache' => '../src/Cache',
             'auto_reload' => true,
         ]);
 
@@ -36,6 +68,12 @@ class ContactFormSubmission {
         }
     }
 
+    /**
+     * @return string
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
     public function handleGetRequest()
     {
         $category = new Category($this->connection);
@@ -50,9 +88,18 @@ class ContactFormSubmission {
         ]);
     }
 
+    /**
+     * @param array $input
+     * @return false|string
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
     public function handlePostRequest(array $input = [])
     {
-        $success = false;
+        $this->setInput($input);
+        $this->setSuccess(false);
+
         $errors = [];
 
         // Trim and filter the values from the input.
@@ -111,7 +158,9 @@ class ContactFormSubmission {
             $errors['comment'] = "Please fill in the comment field";
         }
 
-        if(empty($errors)) {
+        $this->setErrors($errors);
+
+        if(empty($this->getErrors())) {
             // Find or create the Person record:
             $person = new Person($this->connection);
             $personId = $person->findId($email, $firstName, $lastName);
@@ -129,50 +178,85 @@ class ContactFormSubmission {
             $contactFormId = $form->insert($categoryId, $personId, $comment, $orderNumber);
 
             if($contactFormId !== false && $personId !== false) {
-                $success = true;
+                $this->setSuccess(true);
             }
         }
 
-        $this->setInput($input);
-        $this->setSuccess($success);
-        $this->setErrors($errors);
+        if($this->getNoScript() !== false) {
+            // If the client doesn't have Javascript enabled, rerender the form.
+            if($this->getSuccess() === true) {
+                // Clear the input fields if we have saved the form successfully.
+                $this->setInput([]);
+            }
+            return $this->handleGetRequest();
+        } else {
+            // Otherwise respond to the ajax request.
+            return json_encode([
+                'success' => $this->getSuccess(),
+                'errors' => $this->getErrors(),
+            ]);
+        }
     }
 
+    /**
+     * @return bool
+     */
     public function getNoScript()
     {
         return $this->noScript;
     }
 
+    /**
+     * @param bool $noScript
+     */
     public function setNoScript(bool $noScript)
     {
         $this->noScript = $noScript;
     }
 
+    /**
+     * @return null
+     */
     public function getSuccess()
     {
         return $this->success;
     }
 
+    /**
+     * @param bool $success
+     */
     public function setSuccess(bool $success)
     {
         $this->success = $success;
     }
 
+    /**
+     * @return array
+     */
     public function getErrors()
     {
         return $this->errors;
     }
 
+    /**
+     * @param array $errors
+     */
     public function setErrors(array $errors)
     {
         $this->errors = $errors;
     }
 
+    /**
+     * @return array
+     */
     public function getInput()
     {
         return $this->input;
     }
 
+    /**
+     * @param array $input
+     */
     public function setInput(array $input)
     {
         $this->input = $input;
