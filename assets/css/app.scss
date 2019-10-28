@@ -1,14 +1,25 @@
-@import "../../node_modules/bootstrap/scss/bootstrap";
+@import "~bootstrap/scss/bootstrap";
+@import "~bootstrap-select/sass/bootstrap-select.scss";
 
 //VARIABLES
 $bg: rgba(0, 0, 0, 0.1);
-$formMaxWidth: 450px;
 
 //STYLES
 body {
   background-color: $bg;
 }
 
-.form-group-md {
-    max-width: $formMaxWidth;
+.hidden {
+    display: none !important;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    display: none;
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance:textfield; /* Firefox */
 }
