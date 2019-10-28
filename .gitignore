@@ -6,7 +6,3 @@
 /public/favicons
 /vendor/
 /.vagrant/
-/Vagrantfile
-/vagrant/
-/vmConfigDefaults
-/vmConfigOverrides
